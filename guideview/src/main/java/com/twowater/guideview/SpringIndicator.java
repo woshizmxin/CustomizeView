@@ -65,10 +65,12 @@ public class SpringIndicator extends FrameLayout {
 
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.SpringIndicator);
         textColorId = a.getResourceId(R.styleable.SpringIndicator_siTextColor, textColorId);
-        selectedTextColorId = a.getResourceId(R.styleable.SpringIndicator_siSelectedTextColor, selectedTextColorId);
+        selectedTextColorId = a.getResourceId(R.styleable.SpringIndicator_siSelectedTextColor,
+                selectedTextColorId);
         textSize = a.getDimension(R.styleable.SpringIndicator_siTextSize, textSize);
         textBgResId = a.getResourceId(R.styleable.SpringIndicator_siTextBg, 0);
-        indicatorColorId = a.getResourceId(R.styleable.SpringIndicator_siIndicatorColor, indicatorColorId);
+        indicatorColorId = a.getResourceId(R.styleable.SpringIndicator_siIndicatorColor,
+                indicatorColorId);
         indicatorColorsId = a.getResourceId(R.styleable.SpringIndicator_siIndicatorColors, 0);
         radiusMax = a.getDimension(R.styleable.SpringIndicator_siRadiusMax, radiusMax);
         radiusMin = a.getDimension(R.styleable.SpringIndicator_siRadiusMin, radiusMin);
@@ -102,14 +104,17 @@ public class SpringIndicator extends FrameLayout {
 
     private void addTabContainerView() {
         tabContainer = new LinearLayout(getContext());
-        tabContainer.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1.0f));
+        tabContainer.setLayoutParams(
+                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT, 1.0f));
         tabContainer.setOrientation(LinearLayout.HORIZONTAL);
         tabContainer.setGravity(Gravity.CENTER);
         addView(tabContainer);
     }
 
     private void addTabItems() {
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1.0f);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1.0f);
         tabs = new ArrayList<>();
         for (int i = 0; i < viewPager.getAdapter().getCount(); i++) {
             TextView textView = new TextView(getContext());
@@ -143,7 +148,6 @@ public class SpringIndicator extends FrameLayout {
         springView.getHeadPoint().setY(view.getY() + view.getHeight() / 2);
         springView.getFootPoint().setX(view.getX() + view.getWidth() / 2);
         springView.getFootPoint().setY(view.getY() + view.getHeight() / 2);
-        springView.animCreate();
     }
 
 
@@ -170,18 +174,22 @@ public class SpringIndicator extends FrameLayout {
             }
 
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            public void onPageScrolled(int position, float positionOffset,
+                    int positionOffsetPixels) {
                 if (position < tabs.size() - 1) {
                     // radius
                     float radiusOffsetHead = 0.5f;
                     if (positionOffset < radiusOffsetHead) {
                         springView.getHeadPoint().setRadius(radiusMin);
                     } else {
-                        springView.getHeadPoint().setRadius(((positionOffset - radiusOffsetHead) / (1 - radiusOffsetHead) * radiusOffset + radiusMin));
+                        springView.getHeadPoint().setRadius(
+                                ((positionOffset - radiusOffsetHead) / (1 - radiusOffsetHead)
+                                        * radiusOffset + radiusMin));
                     }
                     float radiusOffsetFoot = 0.5f;
                     if (positionOffset < radiusOffsetFoot) {
-                        springView.getFootPoint().setRadius((1 - positionOffset / radiusOffsetFoot) * radiusOffset + radiusMin);
+                        springView.getFootPoint().setRadius(
+                                (1 - positionOffset / radiusOffsetFoot) * radiusOffset + radiusMin);
                     } else {
                         springView.getFootPoint().setRadius(radiusMin);
                     }
@@ -190,15 +198,22 @@ public class SpringIndicator extends FrameLayout {
                     float headX = 1f;
                     if (positionOffset < headMoveOffset) {
                         float positionOffsetTemp = positionOffset / headMoveOffset;
-                        headX = (float) ((Math.atan(positionOffsetTemp * acceleration * 2 - acceleration) + (Math.atan(acceleration))) / (2 * (Math.atan(acceleration))));
+                        headX = (float) ((Math.atan(
+                                positionOffsetTemp * acceleration * 2 - acceleration) + (Math.atan(
+                                acceleration))) / (2 * (Math.atan(acceleration))));
                     }
-                    springView.getHeadPoint().setX(getTabX(position) - headX * getPositionDistance(position));
+                    springView.getHeadPoint().setX(
+                            getTabX(position) - headX * getPositionDistance(position));
                     float footX = 0f;
                     if (positionOffset > footMoveOffset) {
-                        float positionOffsetTemp = (positionOffset - footMoveOffset) / (1 - footMoveOffset);
-                        footX = (float) ((Math.atan(positionOffsetTemp * acceleration * 2 - acceleration) + (Math.atan(acceleration))) / (2 * (Math.atan(acceleration))));
+                        float positionOffsetTemp =
+                                (positionOffset - footMoveOffset) / (1 - footMoveOffset);
+                        footX = (float) ((Math.atan(
+                                positionOffsetTemp * acceleration * 2 - acceleration) + (Math.atan(
+                                acceleration))) / (2 * (Math.atan(acceleration))));
                     }
-                    springView.getFootPoint().setX(getTabX(position) - footX * getPositionDistance(position));
+                    springView.getFootPoint().setX(
+                            getTabX(position) - footX * getPositionDistance(position));
 
                     // reset radius
                     if (positionOffset == 0) {
@@ -253,7 +268,8 @@ public class SpringIndicator extends FrameLayout {
     }
 
     private void createIndicatorColorAnim() {
-        indicatorColorAnim = ObjectAnimator.ofInt(springView, "indicatorColor", indicatorColorArray);
+        indicatorColorAnim = ObjectAnimator.ofInt(springView, "indicatorColor",
+                indicatorColorArray);
         indicatorColorAnim.setEvaluator(new ArgbEvaluator());
         indicatorColorAnim.setDuration(INDICATOR_ANIM_DURATION);
     }

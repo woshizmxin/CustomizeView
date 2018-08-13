@@ -1,14 +1,11 @@
 package com.twowater.guideview;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.animation.OvershootInterpolator;
 
 public class SpringView extends View {
 
@@ -32,8 +29,6 @@ public class SpringView extends View {
     }
 
     private void init() {
-        setAlpha(0);
-
         headPoint = new Point();
         footPoint = new Point();
 
@@ -47,11 +42,13 @@ public class SpringView extends View {
 
     private void makePath() {
 
-        float headOffsetX = (float) (headPoint.getRadius() * Math.sin(Math.atan((footPoint.getY() - headPoint.getY()) / (footPoint.getX() - headPoint.getX()))));
-        float headOffsetY = (float) (headPoint.getRadius() * Math.cos(Math.atan((footPoint.getY() - headPoint.getY()) / (footPoint.getX() - headPoint.getX()))));
+        double angle = Math.atan(
+                (footPoint.getY() - headPoint.getY()) / (footPoint.getX() - headPoint.getX()));
+        float headOffsetX = (float) (headPoint.getRadius() * Math.sin(angle));
+        float headOffsetY = (float) (headPoint.getRadius() * Math.cos(angle));
 
-        float footOffsetX = (float) (footPoint.getRadius() * Math.sin(Math.atan((footPoint.getY() - headPoint.getY()) / (footPoint.getX() - headPoint.getX()))));
-        float footOffsetY = (float) (footPoint.getRadius() * Math.cos(Math.atan((footPoint.getY() - headPoint.getY()) / (footPoint.getX() - headPoint.getX()))));
+        float footOffsetX = (float) (footPoint.getRadius() * Math.sin(angle));
+        float footOffsetY = (float) (footPoint.getRadius() * Math.cos(angle));
 
         float x1 = headPoint.getX() - headOffsetX;
         float y1 = headPoint.getY() + headOffsetY;
@@ -83,20 +80,6 @@ public class SpringView extends View {
         canvas.drawCircle(headPoint.getX(), headPoint.getY(), headPoint.getRadius(), paint);
         canvas.drawCircle(footPoint.getX(), footPoint.getY(), footPoint.getRadius(), paint);
         super.onDraw(canvas);
-    }
-
-    public void animCreate() {
-        setPivotX(getHeadPoint().getX());
-        setPivotY(getFootPoint().getY());
-        AnimatorSet animatorSet = new AnimatorSet();
-        ObjectAnimator oaX = ObjectAnimator.ofFloat(this, "scaleX", 0.3f, 1f);
-        ObjectAnimator oaY = ObjectAnimator.ofFloat(this, "scaleY", 0.3f, 1f);
-        ObjectAnimator oaA = ObjectAnimator.ofFloat(this, "alpha", 0.0f, 1f);
-        animatorSet.play(oaX).with(oaY).with(oaA);
-        animatorSet.setDuration(500);
-        animatorSet.setInterpolator(new OvershootInterpolator());
-        animatorSet.setStartDelay(300);
-        animatorSet.start();
     }
 
     public Point getHeadPoint() {

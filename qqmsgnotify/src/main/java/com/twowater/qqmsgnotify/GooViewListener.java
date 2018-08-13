@@ -73,7 +73,9 @@ public class GooViewListener implements OnTouchListener, GooView.OnDisappearList
             AnimationDrawable mAnimDrawable = (AnimationDrawable) imageView.getDrawable();
             final BubbleLayout bubbleLayout = new BubbleLayout(mContext);
             int centerY = (int) mDragCenter.y - CommonUtil.getStatusBarHeight(mGooView);
-            bubbleLayout.setCenter((int) mDragCenter.x, centerY);
+//            bubbleLayout.setCenter((int) mDragCenter.x, centerY);
+            bubbleLayout.setX(mDragCenter.x);
+            bubbleLayout.setY(centerY);
             bubbleLayout.addView(imageView, new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.WRAP_CONTENT,
                     FrameLayout.LayoutParams.WRAP_CONTENT));
